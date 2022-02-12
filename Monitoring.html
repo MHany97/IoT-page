@@ -1,0 +1,343 @@
+<!doctype html>
+
+
+<html>
+<head>
+
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+        <style >
+            #line_top_x{
+                align-self: center;
+            }
+         </style>
+
+          <script>
+            var elecpower;
+            var flowpower;  
+            var RPM = 2800;
+            var K;
+            var point1 = 22.522;
+            var point2 = 22.3445;
+            var point3 = 22.112;
+            var point4 = 21.8245;
+            var point5 = 21.482;
+            var point6 = 21.0845;
+            var point7 = 20.632;
+            var point8 = 20.1245;
+            var point9 = 19.562;    
+            var point10 = 18.9445;
+            var point11 = 18.272;
+            var point12 = 17.5445;
+            var point13 = 16.762;
+            var point14 = 15.9245;
+            var point15 = 15.032;
+            var point16 = 14.0845;
+            var point17 = 13.082;
+            var point18 = 12.0245;
+
+             K = RPM/2800;
+             point1 = K*K*point1;
+             point2 = K*K*point2;
+             point3 = K*K*point3;
+             point4 = K*K*point4;
+             point5 = K*K*point5;
+             point6 = K*K*point6;
+             point7 = K*K*point7;
+             point8 = K*K*point8;
+             point9 = K*K*point9;
+             point10 = K*K*point10;
+             point11 = K*K*point11;
+             point12 = K*K*point12;
+             point13 = K*K*point13;
+             point14 = K*K*point14;
+             point15 = K*K*point15;
+             point16 = K*K*point16;
+             point17 = K*K*point17;
+             point18 = K*K*point18;
+
+
+
+
+
+                  window.onload = function () {
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                zoomEnabled: false,
+                theme: "light",
+                title:{
+                    text: "Pump & System Curve"
+                },
+                axisX:{
+                    title: "Flow (L/mins)",
+                    valueFormatString: "####",
+                    interval: 5
+                },
+                axisY:{ // Blue line Pump
+                    logarithmic: false, //change it to false
+                    title: "Head (m)",
+                    titleFontColor: "#6D78AD",
+                    lineColor: "#6D78AD",
+                    gridThickness: 0,
+                    lineThickness: 1,
+                    includeZero: false,
+                    labelFormatter: addSymbols
+                },
+                axisY2:{
+                    title: "Head (m)",
+                    titleFontColor: "#51CDA0",
+                    logarithmic: false, //change it to true
+                    lineColor: "#51CDA0",
+                    gridThickness: 0,
+                    lineThickness: 1,
+                    labelFormatter: addSymbols
+                },
+                legend:{
+                    verticalAlign: "top",
+                    fontSize: 16,
+                    dockInsidePlotArea: true
+                },
+                data: [{//data of Blue line (pump)
+                    type: "line",
+                    xValueFormatString: "####",
+                    showInLegend: true,
+                    name: "Pump's Curve",
+                    dataPoints: [
+                        { x: 0, y: point1 },
+                        { x: 5, y: point2 },
+                        { x: 10, y: point3 },
+                        { x: 15, y: point4 },
+                        { x: 20, y: point5 },
+                        { x: 25, y: point6 },
+                        { x: 30, y: point7 },
+                        { x: 35, y: point8 },
+                        { x: 40, y: point9 },
+                        { x: 45, y: point10 },
+                        { x: 50, y: point11 },
+                        { x: 55, y: point12 },
+                        { x: 60, y: point13 },
+                        { x: 65, y: point14 },
+                        { x: 70, y: point15 },
+                        { x: 75, y: point16 },
+                        { x: 80, y: point17 },
+                        { x: 85, y: point18 }
+            
+                    ]
+                },
+                {
+                    type: "line",
+                    xValueFormatString: "####",
+                    axisYType: "secondary",
+                    showInLegend: true,
+                    name: "System Curve",
+                    dataPoints: [//system Curve Data
+                        { x: 0, y: 1.5 },
+                        { x: 5, y: 1.8555 },
+                        { x: 10, y: 2.356 },
+                        { x: 15, y: 3.0015 },
+                        { x: 20, y: 3.792 },
+                        { x: 25, y: 4.7275 },
+                        { x: 30, y: 5.808 },
+                        { x: 35, y: 7.0335 },
+                        { x: 40, y: 8.404 },
+                        { x: 45, y: 9.9195 },
+                        { x: 50, y: 11.58 },
+                        { x: 55, y: 13.3855 },
+                        { x: 60, y: 15.336 },
+                        { x: 65, y: 17.4315 },
+                        { x: 70, y: 19.672 },
+                        { x: 75, y: 22.0575 },
+                        { x: 80, y: 24.588 },
+                        { x: 85, y: 27.2635 }
+                    
+                    ]
+                }]
+            });
+            chart.render();
+
+            function addSymbols(e){
+                var suffixes = ["", "K", "M", "B"];
+
+                var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
+                if(order > suffixes.length - 1)
+                    order = suffixes.length - 1;
+
+                var suffix = suffixes[order];
+                return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+}
+
+}
+
+
+
+</script>
+
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content=>
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="utf-8">
+
+    <title>Monitoring</title>
+    
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fixed.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-spy="scroll" data-target="#navbarResponsive">    
+<div id="container">        
+    <!-- Section of INTO Section -->
+    <div id= "MONITOR">
+        <!-- Section of slider -->
+        <div id="slider" class="offset">
+            <!-- Nav Bar-->
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+                <a class="navbar-brand" href="#"><img src="imgs/Logo.png"></a>
+                
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id=navbarResponsive>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">INTRO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#PRESENTATION">PRESENTATION</a>
+                        </li>   
+                        <li class="nav-item">
+                            <a class="nav-link" href="#MONITOR">MONITOR</a>
+                        </li>   
+                    </ul>
+                </div>
+            </nav>
+            </div>
+            </div>
+            <div id="EngAsu" class="offset">
+                <div class="text-center">
+                  <img src="imgs/ellec syst.jpg" class="img-fluid" alt="Responsive image" id="asuall">
+                </div>                  
+    <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Phase 1</th>
+              <th scope="col">phase 2</th>
+              <th scope="col">phase 3</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th scope="row">Voltage (v)</th>
+              <td id="vol1">220</td>
+              <td id="vol2">218</td>
+              <td id="vol3">216</td>
+            </tr>
+            <tr>
+              <th scope="row">Current (A) </th>
+              <td id="cur1">2.3</td>
+              <td id="cur2">2</td>
+              <td id="cur3">2.1</td>
+            </tr>
+            
+          </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-12" id="power">
+        <h2> Electrical Power= <h2 id="elecpowervalue"></h2></h2> <!---- Electrical power value = ((phase1 * Current1)/1.2) -->
+    </div>
+</div>  
+
+
+
+
+<hr class="solid">
+
+<div id="EngAsu" class="offset">
+    <div class="text-center">
+      <img src="imgs/Mech Syst.jpg" class="img-fluid" alt="Responsive image" id="asuall">
+    </div>      
+    
+</div>
+
+<div>
+<table class="table">
+          <thead>
+            <tr>
+             <th scope="col">Sensor</th>
+              <th scope="col">Value</th>
+              <th scope="col">Sensor</th>
+              <th scope="col">Value</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th scope="row">Flow Sensor1 (L/min)</th>
+              <td id="flow1">50</td>
+              <td  id="headpres1">Pressure Sensor 1 (bar)</td>
+              <td id="pres1">1.5</td>
+            </tr>
+            <tr>
+              <th scope="row">Flow Sensor2 (L/min) </th>
+              <td id="flow2">25</td>
+               <td  id="headpres2">Pressure Sensor 2 (bar)</td>
+              <td id="pres2">1.44</td>
+            </tr>
+             <tr>
+              <th scope="row">Flow Sensor3  (L/min) </th>
+              <td id="flow3">25</td>
+              <td  id="pumphead">Pump's Speed(RPM)</td>
+              <td id="speed">2888</td>
+            </tr>
+            
+            
+          </tbody>
+</table>
+<div class="row">
+    <div class="col-md-12" id="power">
+        <h2> Flow Power= <h2 id="flowpowervalue"></h2></h2>  <!---- flow power value = (15*pressurs 1 * flow 1)) -->
+    </div>
+</div>  
+
+
+<div class="row">
+    
+        <div class="col-md-12">
+            
+
+                <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+            
+            
+
+        </div>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        </div>
+
+<script type="text/javascript" src="index.js"></script>
+
+    <!--- Script Source Files -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
+    <!--- End of Script Source Files -->
+        
+        
+
+
+
+
+
+
+</body>
+
+</html>
